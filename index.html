@@ -25,13 +25,13 @@
         // 请替换为您在第一步中获取的实际 URL 和 KEY
         const SUPABASE_URL = 'https://cpapbseovbithrnavygb.supabase.co';
         const SUPABASE_ANON_KEY = 'sb_publishable_T5oWIPZi1MZZu9XeIWaheQ_e98Tc2DE';
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         // 2. 注册功能
         async function handleSignUp() {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-            const { data, error } = await supabase.auth.signUp({ email, password });
+            const { data, error } = await client.auth.signUp({ email, password });
             
             if (error) alert("注册失败: " + error.message);
             else alert("注册成功！请查收邮件确认激活（如果开启了邮箱验证）。");
@@ -41,7 +41,7 @@
         async function handleSignIn() {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-            const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+            const { data, error } = await client.auth.signInWithPassword({ email, password });
 
             if (error) alert("登录失败: " + error.message);
             else console.log("登录成功:", data);
@@ -49,12 +49,12 @@
 
         // 4. 退出登录
         async function handleSignOut() {
-            await supabase.auth.signOut();
+            await client.auth.signOut();
             alert("已退出");
         }
 
         // 5. 监听登录状态变化 (核心逻辑)
-        supabase.auth.onAuthStateChange((event, session) => {
+        client.auth.onAuthStateChange((event, session) => {
             const authForm = document.getElementById('auth-form');
             const userInfo = document.getElementById('user-info');
             const userEmail = document.getElementById('user-email');
